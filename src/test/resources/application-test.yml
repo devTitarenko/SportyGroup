@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: jackpot-service-test
+  
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: jackpot-service-test-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+server:
+  port: 0  # Random port for tests
+
+logging:
+  level:
+    com.sportygroup.jackpot: DEBUG
+    org.springframework.kafka: WARN
+    org.springframework.test: WARN
+
+jackpot:
+  topics:
+    bets: jackpot-bets-test
+  default-initial-pool: 1000.0
+  strategies:
+    fixed-contribution:
+      percentage: 0.05  # 5%
+    variable-contribution:
+      initial-percentage: 0.10  # 10%
+      decay-rate: 0.001  # 0.1% per pool increase
+    fixed-reward:
+      chance-percentage: 0.01  # 1%
+    variable-reward:
+      base-chance: 0.005  # 0.5%
+      increase-rate: 0.0001  # 0.01% per pool increase
+      max-chance: 1.0  # 100%
+      trigger-limit: 10000.0  # Pool amount to trigger 100% chance
+
+# Disable Kafka for tests by default
+kafka:
+  enabled: false
